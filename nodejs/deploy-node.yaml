@@ -1,0 +1,27 @@
+# Install nodejs and npm
+---
+- name: Install node and npm
+  hosts: webserver
+  become: true
+  become_user: root
+  tasks:
+    - name: Update apt repo and cache
+      apt:
+        update_cache: yes
+        force_apt_get: yes
+        cache_valid_time: 3600
+    - name: Install nodejs and npm
+      apt:
+        pkg:
+          - nodejs
+          - npm
+
+- name: Deploy nodejs app
+  hosts: webserver
+  become: true
+  become_user: root
+  tasks:
+    - name: Unpack the nodejs file and copy to the remote server
+      unarchive:
+        src: "{{ playbook_dir }}/simple-nodejs-master/nodejs-app-1.0.0.tgz" # Local
+        dest: /root/ # Remote

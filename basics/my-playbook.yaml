@@ -2,15 +2,15 @@
 - name: Configure nginx web server
   hosts: webserver # Must be from the hosts file
   tasks:
-  - name: Install nginx server
-    become: true
-    become_user: root
-    apt:
-      name: nginx
-      state: latest
-  - name: Start nginx server
-    become: true
-    become_user: root
-    service:
-      name: nginx
-      state: started
+    - name: Install nginx server
+      become: true
+      become_user: root
+      apt:
+        name: nginx
+        state: latest
+    - name: Start nginx server
+      become: true
+      become_user: root
+      service:
+        name: nginx
+        state: started
