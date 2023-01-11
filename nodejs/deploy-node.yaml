@@ -25,3 +25,16 @@
       unarchive:
         src: "{{ playbook_dir }}/simple-nodejs-master/nodejs-app-1.0.0.tgz" # Local
         dest: /root/ # Remote
+    - name: Install dependencies from package.json with npm
+      npm:
+        path: /root/package # Dir containing package.json
+    - name: Start the application
+      command: # command and shell modules are not idempotent, use conditionals to mitigate
+        chdir: /root/package/app
+        cmd: node server.js
+      async: 1000 # Timeout in seconds for the async task
+      poll: 0 # Polling interval in seconds for the next task to start
+    - name: Ensure the app is running
+      shell: ps aux | grep node # shell module allows use of operators, env vars, etc.
+      register: app_status # Store the output of the command in a variable
+    - debug: msg={{app_status.stdout_lines}}
